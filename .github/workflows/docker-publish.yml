@@ -84,11 +84,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
         
-      - name: Log into registry
-        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login docker.pkg.github.com -u ${{ github.actor }} --password-stdin
-        
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@master
+        env:
+          TRIVY_USERNAME=${{ github.actor }}
+          TRIVY_PASSWORD=${{ secrets.GITHUB_TOKEN }}
         with:
           image-ref: 'docker.pkg.github.com/${{ github.repository }}/trivy-in-gihub:${{ github.sha }}'
           format: 'template'
